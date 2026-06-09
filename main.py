@@ -6,6 +6,7 @@ import os
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
+from PyQt5.QtPrintSupport import QPrinter # PDF çıktısı için eklendi
 from database import veritabani_olustur
 
 # --- ANYTYPE TARZI AYDINLIK TEMA ---
@@ -24,9 +25,11 @@ QListWidget { background-color: transparent; border: none; outline: 0; }
 QListWidget::item { padding: 14px; margin-bottom: 4px; border-radius: 8px; background-color: #FFFFFF; border: 1px solid #EAEAEA; }
 QListWidget::item:selected { background-color: #F0F4FF; color: #111111; border: 1px solid #D3E2FD; font-weight: 500; }
 QTabWidget::pane { border: none; background: transparent; top: 10px; }
-QTabBar::tab { background: transparent; border: none; padding: 8px 16px; margin-right: 10px; color: #666666; font-weight: 500; font-size: 15px; border-bottom: 2px solid transparent; }
-QTabBar::tab:selected { color: #111111; border-bottom: 2px solid #111111; }
+QTabBar::tab { background: transparent; border: none; padding: 10px 15px; min-width: 140px; margin-right: 5px; color: #666666; font-weight: 500; font-size: 14px; border-bottom: 2px solid transparent; }
+QTabBar::tab:selected { color: #111111; border-bottom: 2px solid #111111; font-weight: 600; }
 QTabBar::tab:hover:!selected { color: #333333; }
+QTableWidget { background-color: #FFFFFF; border: 1px solid #EAEAEA; border-radius: 8px; gridline-color: #EAEAEA; }
+QHeaderView::section { background-color: #F0F0F0; padding: 8px; border: 1px solid #EAEAEA; font-weight: bold; }
 #UstBar { background-color: #FFFFFF; border-bottom: 1px solid #EAEAEA; }
 #OzelBaslik { background-color: #FFFFFF; }
 #BaslikBtn { background-color: transparent; border: none; padding: 5px; border-radius: 0px; font-size: 14px; color: #111111; }
@@ -51,9 +54,11 @@ QListWidget { background-color: transparent; border: none; outline: 0; }
 QListWidget::item { padding: 14px; margin-bottom: 4px; border-radius: 8px; background-color: #1A1A1A; border: 1px solid #222222; }
 QListWidget::item:selected { background-color: #2A2A35; color: #FFFFFF; border: 1px solid #4A4A5A; font-weight: 500; }
 QTabWidget::pane { border: none; background: transparent; top: 10px; }
-QTabBar::tab { background: transparent; border: none; padding: 8px 16px; margin-right: 10px; color: #888888; font-weight: 500; font-size: 15px; border-bottom: 2px solid transparent; }
-QTabBar::tab:selected { color: #FFFFFF; border-bottom: 2px solid #FFFFFF; }
+QTabBar::tab { background: transparent; border: none; padding: 10px 15px; min-width: 140px; margin-right: 5px; color: #888888; font-weight: 500; font-size: 14px; border-bottom: 2px solid transparent; }
+QTabBar::tab:selected { color: #FFFFFF; border-bottom: 2px solid #FFFFFF; font-weight: 600; }
 QTabBar::tab:hover:!selected { color: #AAAAAA; }
+QTableWidget { background-color: #1A1A1A; border: 1px solid #222222; border-radius: 8px; gridline-color: #2A2A2A; }
+QHeaderView::section { background-color: #222222; padding: 8px; border: 1px solid #2A2A2A; font-weight: bold; color: white; }
 #UstBar { background-color: #1A1A1A; border-bottom: 1px solid #222222; }
 #OzelBaslik { background-color: #1A1A1A; }
 #BaslikBtn { background-color: transparent; border: none; padding: 5px; border-radius: 0px; font-size: 14px; color: #E0E0E0; }
@@ -132,7 +137,7 @@ class GirisEkran(QWidget):
         self.input_kullanici = QLineEdit()
         self.input_kullanici.setPlaceholderText("Kullanıcı adı...")
         self.input_sifre = QLineEdit()
-        self.input_sifre.setPlaceholderText("Şre...")
+        self.input_sifre.setPlaceholderText("Şifre...")
         self.input_sifre.setEchoMode(QLineEdit.Password)
         
         form_layout.addRow("Kullanıcı Adı:", self.input_kullanici)
@@ -266,9 +271,15 @@ class ProfilEkran(QWidget):
         ust_baslik_layout = QHBoxLayout()
         ust_baslik_layout.addWidget(QLabel("<h2 style='font-size: 24px;'>Kişisel Alan</h2>"))
         ust_baslik_layout.addStretch()
+        
         btn_excel = QPushButton("📥 CSV İndir")
         btn_excel.clicked.connect(self.excel_cikti_al)
+        
+        btn_pdf = QPushButton("📄 PDF Raporu Al")
+        btn_pdf.clicked.connect(self.pdf_rapor_al)
+        
         ust_baslik_layout.addWidget(btn_excel)
+        ust_baslik_layout.addWidget(btn_pdf)
         layout.addLayout(ust_baslik_layout)
         
         self.sekmeler = QTabWidget()
@@ -277,10 +288,20 @@ class ProfilEkran(QWidget):
         self.liste_genel = QListWidget()
         self.liste_puanlar = QListWidget() 
         
+        # --- YENİ İSTATİSTİK TABLOSU EKLENTİSİ ---
+        self.tablo_gecmis = QTableWidget()
+        self.tablo_gecmis.setColumnCount(5)
+        self.tablo_gecmis.setHorizontalHeaderLabels(["Şehir", "Mekan", "Kategori (Sezon)", "Bütçe", "Verilen Puan"])
+        self.tablo_gecmis.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.tablo_gecmis.setEditTriggers(QAbstractItemView.NoEditTriggers) # Tablonun değiştirilmesini engelle
+        self.tablo_gecmis.setSelectionBehavior(QAbstractItemView.SelectRows) # Tıklayınca tüm satırı seç
+        
         self.sekmeler.addTab(self.liste_gidilecek, "Gidilecek Yerler")
         self.sekmeler.addTab(self.liste_gidilen, "Gidilen Yerler")
         self.sekmeler.addTab(self.liste_genel, "Genel Notlar")
         self.sekmeler.addTab(self.liste_puanlar, "Değerlendirmeler")
+        self.sekmeler.addTab(self.tablo_gecmis, "📊 Tüm İstatistikler") # Tablo eklendi
+        
         layout.addWidget(self.sekmeler)
 
         layout.addSpacing(10)
@@ -309,6 +330,7 @@ class ProfilEkran(QWidget):
         conn = sqlite3.connect('akilli_rehber.db')
         cursor = conn.cursor()
         
+        # Kelime Tamamlayıcı
         kelimeler = []
         cursor.execute("SELECT sehir_adi FROM Sehirler")
         kelimeler.extend([row[0] for row in cursor.fetchall()])
@@ -320,11 +342,14 @@ class ProfilEkran(QWidget):
         tamamlayici.setFilterMode(Qt.MatchContains) 
         self.input_not.setCompleter(tamamlayici)
 
+        # Listeleri Temizle
         self.liste_gidilecek.clear()
         self.liste_gidilen.clear()
         self.liste_genel.clear()
         self.liste_puanlar.clear()
+        self.tablo_gecmis.setRowCount(0)
 
+        # Notları Çek
         cursor.execute("SELECT kategori, not_icerik, tarih FROM SeyahatNotlari WHERE kullanici_id = ?", (self.parent.aktif_kullanici_id,))
         for n in cursor.fetchall():
             kategori = n[0]
@@ -334,15 +359,33 @@ class ProfilEkran(QWidget):
             elif kategori == "Gidilen Yerler": self.liste_gidilen.addItem(metin)
             else: self.liste_genel.addItem(metin)
             
-        cursor.execute('''SELECT m.mekan_adi, z.puan, z.yorum FROM Ziyaret_ve_Puanlama z
-                          JOIN Mekanlar m ON z.mekan_id = m.id WHERE z.kullanici_id = ?''', (self.parent.aktif_kullanici_id,))
+        # Değerlendirmeleri ve Tablo Verisini Çek
+        sorgu = '''SELECT s.sehir_adi, m.mekan_adi, m.sezon, m.butce, z.puan, z.yorum 
+                   FROM Ziyaret_ve_Puanlama z
+                   JOIN Mekanlar m ON z.mekan_id = m.id
+                   JOIN Sehirler s ON m.sehir_id = s.id
+                   WHERE z.kullanici_id = ?'''
+        cursor.execute(sorgu, (self.parent.aktif_kullanici_id,))
         degerlendirmeler = cursor.fetchall()
+        
         if not degerlendirmeler:
             self.liste_puanlar.addItem("Henüz mekan değerlendirmedin.")
-        for d in degerlendirmeler:
-            p = f"{d[1]}/5" if d[1] > 0 else "Puan Yok"
-            y = d[2] if d[2] else "Yorumsuz"
-            self.liste_puanlar.addItem(f"{d[0]}\n⭐ {p} | 💬 {y}")
+        
+        for row_idx, d in enumerate(degerlendirmeler):
+            sehir_adi, mekan_adi, sezon, butce, puan, yorum = d
+            
+            # Liste İçin
+            puan_str = f"{puan}/5" if puan > 0 else "Puan Yok"
+            yrm_str = yorum if yorum else "Yorumsuz"
+            self.liste_puanlar.addItem(f"{mekan_adi}\n⭐ {puan_str} | 💬 {yrm_str}")
+            
+            # Tablo İçin
+            self.tablo_gecmis.insertRow(row_idx)
+            self.tablo_gecmis.setItem(row_idx, 0, QTableWidgetItem(str(sehir_adi)))
+            self.tablo_gecmis.setItem(row_idx, 1, QTableWidgetItem(str(mekan_adi)))
+            self.tablo_gecmis.setItem(row_idx, 2, QTableWidgetItem(str(sezon)))
+            self.tablo_gecmis.setItem(row_idx, 3, QTableWidgetItem(str(butce)))
+            self.tablo_gecmis.setItem(row_idx, 4, QTableWidgetItem("⭐ " * puan if puan > 0 else "-"))
             
         conn.close()
 
@@ -377,6 +420,65 @@ class ProfilEkran(QWidget):
             QMessageBox.information(self, "Başarılı", f"Panonuz başarıyla Excel (CSV) olarak kaydedildi!\n\nYol:\n{yol}")
         except Exception as e:
             QMessageBox.warning(self, "Hata", f"Hata oluştu: {str(e)}")
+
+    def pdf_rapor_al(self):
+        dosya_yolu, _ = QFileDialog.getSaveFileName(self, "Seyahat Raporunu Kaydet", f"Seyahat_Raporum_{self.parent.aktif_kullanici_adi}.pdf", "PDF Dosyaları (*.pdf)")
+        
+        if not dosya_yolu: return
+        
+        try:
+            conn = sqlite3.connect('akilli_rehber.db')
+            cursor = conn.cursor()
+            sorgu = '''SELECT s.sehir_adi, m.mekan_adi, m.sezon, z.puan, z.yorum 
+                       FROM Ziyaret_ve_Puanlama z
+                       JOIN Mekanlar m ON z.mekan_id = m.id
+                       JOIN Sehirler s ON m.sehir_id = s.id
+                       WHERE z.kullanici_id = ? ORDER BY z.puan DESC'''
+            cursor.execute(sorgu, (self.parent.aktif_kullanici_id,))
+            ziyaretler = cursor.fetchall()
+            conn.close()
+
+            # HTML PDF Şablonu
+            html_icerik = f"""
+            <html>
+            <body style='font-family: Arial, sans-serif;'>
+            <h1 style='color: #2c3e50; text-align: center;'>🌍 {self.parent.aktif_kullanici_adi.capitalize()} - Seyahat Portföyü</h1>
+            <hr>
+            <h3 style='color: #34495e;'>Değerlendirilen Mekanlar</h3>
+            <table border='1' width='100%' cellspacing='0' cellpadding='8' style='border-collapse: collapse; font-size: 14px;'>
+                <tr style='background-color: #34495e; color: white;'>
+                    <th>Şehir</th>
+                    <th>Mekan Adı</th>
+                    <th>Kategori</th>
+                    <th>Puan</th>
+                </tr>
+            """
+            
+            for s_adi, m_adi, sezon, puan, yorum in ziyaretler:
+                puan_gorsel = '⭐' * puan if puan > 0 else '-'
+                html_icerik += f"<tr><td>{s_adi}</td><td>{m_adi}</td><td>{sezon}</td><td align='center'>{puan_gorsel}</td></tr>"
+            
+            html_icerik += """
+            </table><br>
+            <p style='text-align: right; font-size: 11px; color: gray; margin-top: 20px;'>
+            <i>Akıllı Gezi Rehberi &copy; Python ve PyQt5 ile oluşturulmuştur.</i></p>
+            </body>
+            </html>
+            """
+
+            # HTML'i PDF olarak yazdır
+            yazici = QPrinter(QPrinter.HighResolution)
+            yazici.setOutputFormat(QPrinter.PdfFormat)
+            yazici.setOutputFileName(dosya_yolu)
+
+            dokuman = QTextDocument()
+            dokuman.setHtml(html_icerik)
+            dokuman.print_(yazici)
+
+            QMessageBox.information(self, "Başarılı", f"Kapsamlı Seyahat Raporunuz PDF olarak başarıyla kaydedildi!\n\nDosya: {dosya_yolu}")
+        
+        except Exception as e:
+            QMessageBox.critical(self, "Kritik Hata", f"PDF oluşturulurken sistemsel bir hata oluştu:\n{str(e)}")
 
 class SehirSecimEkran(QWidget):
     def __init__(self, parent):
