@@ -14,12 +14,12 @@ TEMA_AYDINLIK = """
 QWidget { background-color: #FAFAFA; color: #111111; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif; font-size: 14px; }
 QLabel { color: #222222; }
 QLabel h1, QLabel h2, QLabel h3 { font-weight: 600; color: #000000; letter-spacing: -0.5px; }
-QPushButton { background-color: #FFFFFF; color: #111111; border: 1px solid #EAEAEA; border-radius: 8px; padding: 10px 18px; font-weight: 500; }
+QPushButton { background-color: #FFFFFF; color: #111111; border: 1px solid #EAEAEA; border-radius: 8px; padding: 10px 18px; font-weight: 500; outline: none; }
 QPushButton:hover { background-color: #F0F0F0; border: 1px solid #DDDDDD; }
 QPushButton:pressed { background-color: #E5E5E5; }
 QPushButton#VurguluBtn { background-color: #111111; color: #FFFFFF; border: none; }
 QPushButton#VurguluBtn:hover { background-color: #333333; }
-QLineEdit, QSpinBox, QTextBrowser, QComboBox { background-color: #FFFFFF; border: 1px solid #EAEAEA; border-radius: 8px; padding: 12px; color: #111111; selection-background-color: #D3E2FD; selection-color: #111111; }
+QLineEdit, QSpinBox, QTextBrowser, QComboBox { background-color: #FFFFFF; border: 1px solid #EAEAEA; border-radius: 8px; padding: 10px; color: #111111; selection-background-color: #D3E2FD; selection-color: #111111; }
 QLineEdit:focus, QSpinBox:focus, QTextBrowser:focus, QComboBox:focus { border: 1px solid #A0A0A0; }
 QListWidget { background-color: transparent; border: none; outline: 0; }
 QListWidget::item { padding: 14px; margin-bottom: 4px; border-radius: 8px; background-color: #FFFFFF; border: 1px solid #EAEAEA; }
@@ -28,13 +28,13 @@ QTabWidget::pane { border: none; background: transparent; top: 10px; }
 QTabBar::tab { background: transparent; border: none; padding: 10px 15px; min-width: 140px; margin-right: 5px; color: #666666; font-weight: 500; font-size: 14px; border-bottom: 2px solid transparent; }
 QTabBar::tab:selected { color: #111111; border-bottom: 2px solid #111111; font-weight: 600; }
 QTabBar::tab:hover:!selected { color: #333333; }
-QTableWidget { background-color: #FFFFFF; border: 1px solid #EAEAEA; border-radius: 8px; gridline-color: #EAEAEA; }
+QTableWidget { background-color: #FFFFFF; border: 1px solid #EAEAEA; border-radius: 8px; gridline-color: #EAEAEA; outline: none; }
 QHeaderView::section { background-color: #F0F0F0; padding: 8px; border: 1px solid #EAEAEA; font-weight: bold; }
 #UstBar { background-color: #FFFFFF; border-bottom: 1px solid #EAEAEA; }
 #OzelBaslik { background-color: #FFFFFF; }
-#BaslikBtn { background-color: transparent; border: none; padding: 5px; border-radius: 0px; font-size: 14px; color: #111111; }
+#BaslikBtn { background-color: transparent; border: none; padding: 5px; border-radius: 0px; font-size: 14px; color: #111111; outline: none; }
 #BaslikBtn:hover { background-color: #EAEAEA; }
-#KapatBtn { background-color: transparent; border: none; padding: 5px; border-radius: 0px; font-size: 14px; color: #111111; }
+#KapatBtn { background-color: transparent; border: none; padding: 5px; border-radius: 0px; font-size: 14px; color: #111111; outline: none; }
 #KapatBtn:hover { background-color: #E81123; color: white; }
 """
 
@@ -43,12 +43,12 @@ TEMA_KARANLIK = """
 QWidget { background-color: #121212; color: #E0E0E0; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif; font-size: 14px; }
 QLabel { color: #E0E0E0; }
 QLabel h1, QLabel h2, QLabel h3 { font-weight: 600; color: #FFFFFF; letter-spacing: -0.5px; }
-QPushButton { background-color: #1E1E1E; color: #E0E0E0; border: 1px solid #2A2A2A; border-radius: 8px; padding: 10px 18px; font-weight: 500; }
+QPushButton { background-color: #1E1E1E; color: #E0E0E0; border: 1px solid #2A2A2A; border-radius: 8px; padding: 10px 18px; font-weight: 500; outline: none; }
 QPushButton:hover { background-color: #2C2C2C; border: 1px solid #3A3A3A; }
 QPushButton:pressed { background-color: #3A3A3A; }
 QPushButton#VurguluBtn { background-color: #E0E0E0; color: #121212; border: none; }
 QPushButton#VurguluBtn:hover { background-color: #FFFFFF; }
-QLineEdit, QSpinBox, QTextBrowser, QComboBox { background-color: #1E1E1E; border: 1px solid #2A2A2A; border-radius: 8px; padding: 12px; color: #E0E0E0; selection-background-color: #4A4A4A; selection-color: #FFFFFF; }
+QLineEdit, QSpinBox, QTextBrowser, QComboBox { background-color: #1E1E1E; border: 1px solid #2A2A2A; border-radius: 8px; padding: 10px; color: #E0E0E0; selection-background-color: #4A4A4A; selection-color: #FFFFFF; }
 QLineEdit:focus, QSpinBox:focus, QTextBrowser:focus, QComboBox:focus { border: 1px solid #555555; }
 QListWidget { background-color: transparent; border: none; outline: 0; }
 QListWidget::item { padding: 14px; margin-bottom: 4px; border-radius: 8px; background-color: #1A1A1A; border: 1px solid #222222; }
@@ -57,13 +57,13 @@ QTabWidget::pane { border: none; background: transparent; top: 10px; }
 QTabBar::tab { background: transparent; border: none; padding: 10px 15px; min-width: 140px; margin-right: 5px; color: #888888; font-weight: 500; font-size: 14px; border-bottom: 2px solid transparent; }
 QTabBar::tab:selected { color: #FFFFFF; border-bottom: 2px solid #FFFFFF; font-weight: 600; }
 QTabBar::tab:hover:!selected { color: #AAAAAA; }
-QTableWidget { background-color: #1A1A1A; border: 1px solid #222222; border-radius: 8px; gridline-color: #2A2A2A; }
+QTableWidget { background-color: #1A1A1A; border: 1px solid #222222; border-radius: 8px; gridline-color: #2A2A2A; outline: none; }
 QHeaderView::section { background-color: #222222; padding: 8px; border: 1px solid #2A2A2A; font-weight: bold; color: white; }
 #UstBar { background-color: #1A1A1A; border-bottom: 1px solid #222222; }
 #OzelBaslik { background-color: #1A1A1A; }
-#BaslikBtn { background-color: transparent; border: none; padding: 5px; border-radius: 0px; font-size: 14px; color: #E0E0E0; }
+#BaslikBtn { background-color: transparent; border: none; padding: 5px; border-radius: 0px; font-size: 14px; color: #E0E0E0; outline: none; }
 #BaslikBtn:hover { background-color: #2A2A2A; }
-#KapatBtn { background-color: transparent; border: none; padding: 5px; border-radius: 0px; font-size: 14px; color: #E0E0E0; }
+#KapatBtn { background-color: transparent; border: none; padding: 5px; border-radius: 0px; font-size: 14px; color: #E0E0E0; outline: none; }
 #KapatBtn:hover { background-color: #E81123; color: white; }
 """
 
@@ -525,30 +525,66 @@ class MekanlarEkran(QWidget):
         self.secili_sehir_adi = ""
         self.secili_sezon = None
         
-        layout = QVBoxLayout()
-        layout.setContentsMargins(30, 20, 30, 30)
+        ana_layout = QHBoxLayout()
+        ana_layout.setContentsMargins(30, 20, 30, 30)
+        ana_layout.setSpacing(20) 
+
+        # --- SOL PANEL (MASTER: Sadece Mekan Listesi) ---
+        sol_panel = QWidget()
+        sol_layout = QVBoxLayout(sol_panel)
+        sol_layout.setContentsMargins(0, 0, 0, 0)
+        
         self.baslik = QLabel("<h2>Mekanlar</h2>")
-        layout.addWidget(self.baslik)
+        sol_layout.addWidget(self.baslik)
 
         self.mekan_listesi = QListWidget()
-        self.mekan_listesi.setMaximumHeight(180)
+        self.mekan_listesi.setMinimumWidth(250)
+        self.mekan_listesi.setMaximumWidth(350)
         self.mekan_listesi.itemClicked.connect(self.mekan_detaylarini_getir)
-        layout.addWidget(self.mekan_listesi)
+        sol_layout.addWidget(self.mekan_listesi)
         
-        self.wiki_kutu = QTextBrowser()
-        self.wiki_kutu.setMaximumHeight(80)
-        self.wiki_kutu.setPlaceholderText("Listeden mekan seçtiğinde Wikipedia özeti buraya gelecek...")
-        layout.addWidget(self.wiki_kutu)
+        # --- SAĞ PANEL (DETAIL: Görsel, Linkler, Yorumlar, Puanlama) ---
+        sag_panel = QWidget()
+        sag_layout = QVBoxLayout(sag_panel)
+        sag_layout.setContentsMargins(0, 0, 0, 0)
+        
+        self.lbl_detay_baslik = QLabel("<h2>Mekan Detayı</h2>")
+        sag_layout.addWidget(self.lbl_detay_baslik)
+        
+        # YENİ: METİN KUTUSU YERİNE DİNAMİK GÖRSEL ETİKETİ
+        self.gorsel_etiket = QLabel("Sol taraftan bir mekan seçin...")
+        self.gorsel_etiket.setAlignment(Qt.AlignCenter)
+        self.gorsel_etiket.setMinimumHeight(180)
+        self.gorsel_etiket.setStyleSheet("background-color: rgba(128, 128, 128, 0.1); border-radius: 8px; border: 1px dashed gray;")
+        sag_layout.addWidget(self.gorsel_etiket)
 
-        layout.addSpacing(10)
+        link_layout = QHBoxLayout()
+        self.btn_google = QPushButton("🌍 İnternette Ara")
+        self.btn_google.setCursor(Qt.PointingHandCursor)
+        self.btn_google.clicked.connect(self.internette_ara)
+        
+        self.btn_harita = QPushButton("🗺️ Haritada Gör")
+        self.btn_harita.setCursor(Qt.PointingHandCursor)
+        self.btn_harita.clicked.connect(self.haritada_gor)
+        
+        self.btn_google.setEnabled(False) 
+        self.btn_harita.setEnabled(False)
+        
+        link_layout.addWidget(self.btn_google)
+        link_layout.addWidget(self.btn_harita)
+        link_layout.addStretch()
+        sag_layout.addLayout(link_layout)
+
+        sag_layout.addSpacing(10)
+        sag_layout.addWidget(QLabel("<b>Kullanıcı Yorumları:</b>"))
         self.yorum_listesi = QListWidget()
-        self.yorum_listesi.setMinimumHeight(100) 
-        layout.addWidget(self.yorum_listesi)
+        sag_layout.addWidget(self.yorum_listesi)
 
         islem_layout = QHBoxLayout()
         self.puan_spin = QSpinBox()
         self.puan_spin.setRange(0, 5) 
         self.puan_spin.setSpecialValueText("Puan Yok")
+        self.puan_spin.setMinimumWidth(110) # Kesilme hatasını kalıcı olarak çözer
         self.puan_spin.setMinimumHeight(45)
         
         self.input_yorum = QLineEdit()
@@ -564,18 +600,27 @@ class MekanlarEkran(QWidget):
         islem_layout.addWidget(self.puan_spin)
         islem_layout.addWidget(self.input_yorum, 1)
         islem_layout.addWidget(btn_kaydet)
-        layout.addLayout(islem_layout)
+        sag_layout.addLayout(islem_layout)
+
+        ana_layout.addWidget(sol_panel)
+        ana_layout.addWidget(sag_panel, 1) 
         
-        self.setLayout(layout)
+        self.setLayout(ana_layout)
 
     def mekanlari_yukle(self, sehir_id, sehir_adi, sezon):
         self.secili_sehir_id = sehir_id
         self.secili_sehir_adi = sehir_adi
         self.secili_sezon = sezon
-        self.baslik.setText(f"<h2>{sehir_adi} Gezi Rehberi</h2>")
+        self.baslik.setText(f"<h2>{sehir_adi}</h2>")
+        self.lbl_detay_baslik.setText("<h2>Mekan Detayı</h2>")
+        
+        self.btn_google.setEnabled(False)
+        self.btn_harita.setEnabled(False)
+        self.gorsel_etiket.clear()
+        self.gorsel_etiket.setText("Sol taraftan bir mekan seçin...")
+        
         self.liste_guncelle()
         self.yorum_listesi.clear()
-        self.wiki_kutu.clear()
 
     def liste_guncelle(self):
         self.mekan_listesi.clear()
@@ -598,35 +643,62 @@ class MekanlarEkran(QWidget):
         mekan_id = item.data(Qt.UserRole)
         mekan_adi = item.text().split("\n")[0]
         
+        self.lbl_detay_baslik.setText(f"<h2>{mekan_adi}</h2>")
+        self.btn_google.setEnabled(True)
+        self.btn_harita.setEnabled(True)
         self.yorumlari_getir(mekan_id)
-        self.wiki_kutu.setText("İnternetten bilgi aranıyor...")
+        
+        # YENİ: İNTERNETTEN GÖRSEL ÇEKME MOTORU
+        self.gorsel_etiket.setText("🖼️ Görsel aranıyor...")
         QApplication.processEvents() 
         
         try:
             basliklar = {'User-Agent': 'GeziRehberiProjesi/1.0'}
-            if self.secili_sezon == "Doğa & Kamp": arama_metni = f"{mekan_adi} {self.secili_sehir_adi} doğa tabiat göl kamp"
-            elif self.secili_sezon == "Kültür Turu": arama_metni = f"{mekan_adi} {self.secili_sehir_adi} tarih antik müze örenyeri"
-            else: arama_metni = f"{mekan_adi} {self.secili_sehir_adi}"
+            arama_metni = f"{mekan_adi} {self.secili_sehir_adi}"
             
             arama_url = "https://tr.wikipedia.org/w/api.php"
             arama_param = {"action": "query", "list": "search", "srsearch": arama_metni, "utf8": 1, "format": "json"}
             
             cevap_arama = requests.get(arama_url, params=arama_param, headers=basliklar, timeout=5)
-            arama_verisi = cevap_arama.json()
-            sonuclar = arama_verisi.get('query', {}).get('search', [])
+            sonuclar = cevap_arama.json().get('query', {}).get('search', [])
             
             if len(sonuclar) > 0:
                 gercek_baslik = sonuclar[0]['title'] 
                 detay_url = f"https://tr.wikipedia.org/api/rest_v1/page/summary/{gercek_baslik}"
                 cevap = requests.get(detay_url, headers=basliklar, timeout=5)
+                
                 if cevap.status_code == 200:
-                    self.wiki_kutu.setText(f"<b>{gercek_baslik}</b><br>{cevap.json().get('extract', 'Özet bulunamadı.')}")
+                    veri = cevap.json()
+                    if 'thumbnail' in veri:
+                        gorsel_url = veri['thumbnail']['source']
+                        # Fotoğrafı indir ve Pixmap'e çevir
+                        resim_cevap = requests.get(gorsel_url, timeout=5)
+                        pixmap = QPixmap()
+                        pixmap.loadFromData(resim_cevap.content)
+                        # Etiketin boyutlarına göre kaliteyi bozmadan (KeepAspectRatio) sığdır
+                        self.gorsel_etiket.setPixmap(pixmap.scaled(self.gorsel_etiket.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation))
+                    else:
+                        self.gorsel_etiket.setText("📸 Bu mekan için Wikipedia'da kapak görseli bulunamadı.")
                 else:
-                    self.wiki_kutu.setText("Bilgiler çekilemedi.")
+                    self.gorsel_etiket.setText("Görsel çekilemedi.")
             else:
-                self.wiki_kutu.setText(f"Wikipedia'da eşleşen bir sonuç bulunamadı.")
+                self.gorsel_etiket.setText("📸 Eşleşen görsel bulunamadı.")
         except Exception:
-            self.wiki_kutu.setText("İnternet bağlantısı kurulamadı.")
+            self.gorsel_etiket.setText("İnternet bağlantısı kurulamadı.")
+
+    def internette_ara(self):
+        secili_item = self.mekan_listesi.currentItem()
+        if secili_item:
+            mekan_adi = secili_item.text().split("\n")[0]
+            url = f"https://www.google.com/search?q={mekan_adi}+{self.secili_sehir_adi}+gezilecek+yerler"
+            QDesktopServices.openUrl(QUrl(url))
+
+    def haritada_gor(self):
+        secili_item = self.mekan_listesi.currentItem()
+        if secili_item:
+            mekan_adi = secili_item.text().split("\n")[0]
+            url = f"https://www.google.com/maps/search/?api=1&query={mekan_adi}+{self.secili_sehir_adi}"
+            QDesktopServices.openUrl(QUrl(url))
 
     def yorumlari_getir(self, mekan_id):
         self.yorum_listesi.clear()
