@@ -4,7 +4,7 @@ Python ve PyQt5 kullanılarak geliştirilmiş, lokasyon bazlı akıllı seyahat 
 
 ## 🚀 Projenin Öne Çıkan Özellikleri
 
-* **Genişletilmiş Turizm Veritabanı:** Türkiye'nin turistik şehirleri için özel olarak derlenmiş, 800'den fazla yüksek kaliteli lokasyon verisi.
+* **Genişletilmiş Turizm Veritabanı:** Türkiye'nin turistik şehirleri için özel olarak derlenmiş, 300'den fazla yüksek kaliteli lokasyon verisi.
 * **Akıllı Kategori Filtreleme:** Kullanıcının seçtiği şehre göre; *Yaz Tatili*, *Kış Tatili*, *Doğa & Kamp* ve *Kültür Turu* rotalarını anında listeler.
 * **Modern GUI Tasarımı:** PyQt5 ile tasarlanmış, kullanıcı deneyimini (UX) ön planda tutan karanlık tema (Dark Mode) destekli akıcı arayüz.
 * **Kişisel Seyahat Defteri:** Kullanıcıların ziyaret ettikleri mekanları puanlayabildiği ve kendi gezi notlarını tutabildiği dinamik veritabanı yönetimi (CRUD işlemleri).
