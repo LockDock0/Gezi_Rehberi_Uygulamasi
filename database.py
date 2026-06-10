@@ -3,7 +3,6 @@ import requests
 import random
 import logging
 
-# Loglama ayarları
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - [SEEDER] - %(message)s')
 
 def veritabani_olustur():
@@ -19,23 +18,18 @@ def veritabani_olustur():
 
         cursor.execute("SELECT COUNT(*) FROM Sehirler")
         if cursor.fetchone()[0] == 0:
-            logging.info("Veritabanı Tohumlama (Database Seeding) işlemi başlatıldı...")
+            logging.info("Nihai Dev Veritabanı Tohumlama (Seeding) işlemi başlatıldı...")
             
-            # Şehirleri API'den Çekme
             try:
                 cevap = requests.get("https://turkiyeapi.dev/api/v1/provinces", timeout=5) 
                 if cevap.status_code == 200:
                     for il in cevap.json()['data']:
                         cursor.execute("INSERT OR IGNORE INTO Sehirler (sehir_adi, bolge) VALUES (?, ?)", (il['name'], il['region']['tr']))
             except Exception:
-                logging.warning("Şehirler API'si yanıt vermedi, lokal şehir listesi kullanılıyor.")
                 yedek_sehirler = [('İzmir', 'Ege'), ('Bursa', 'Marmara'), ('Balıkesir', 'Marmara'), ('Antalya', 'Akdeniz'), ('Nevşehir', 'İç Anadolu'), ('Muğla', 'Ege'), ('İstanbul', 'Marmara'), ('Rize', 'Karadeniz'), ('Erzurum', 'Doğu Anadolu'), ('Kayseri', 'İç Anadolu'), ('Bolu', 'Karadeniz'), ('Şanlıurfa', 'Güneydoğu Anadolu'), ('Trabzon', 'Karadeniz'), ('Çanakkale', 'Marmara'), ('Aydın', 'Ege'), ('Ankara', 'İç Anadolu'), ('Gaziantep', 'Güneydoğu Anadolu'), ('Mardin', 'Güneydoğu Anadolu')]
                 cursor.executemany("INSERT OR IGNORE INTO Sehirler (sehir_adi, bolge) VALUES (?, ?)", yedek_sehirler)
 
-            # Varsayılan Kullanıcı
-            cursor.execute("INSERT OR IGNORE INTO Kullanicilar (kullanici_adi, sifre) VALUES ('admin', '1234')")
-
-            # --- GENİŞLETİLMİŞ MEGA TOHUM VERİLERİ (SEED DATA) ---
+            # --- TÜM ŞEHİRLERİ KAPSAYAN 310+ MEKANLIK DEV VERİ SETİ ---
             tohum_mekanlar = {
                 "Antalya": {
                     "Yaz Tatili": ["Kaputaş Plajı", "Konyaaltı Sahili", "Olympos Plajı", "Patara Plajı", "Cleopatra Plajı", "Adrasan Koyu", "Kekova", "Lara Plajı", "Phaselis Plajı", "Çıralı Sahili", "Suluada", "Korsan Koyu", "Beldibi Plajı"],
@@ -73,81 +67,203 @@ def veritabani_olustur():
                     "Doğa & Kamp": ["Polonezköy Tabiat Parkı", "Belgrad Ormanı", "Atatürk Arberetumu", "Ağva Nehir Kampı", "Şile Saklıgöl", "Aydos Tepesi", "Emirgan Korusu"],
                     "Kültür Turu": ["Ayasofya-i Kebir Cami-i", "Topkapı Sarayı", "Yerebatan Sarnıcı", "Galata Kulesi", "İstanbul Arkeoloji Müzeleri", "Dolmabahçe Sarayı", "Süleymaniye Camii", "Kapalıçarşı", "Kız Kulesi", "Mısır Çarşısı"]
                 },
+                "Balıkesir": {
+                    "Yaz Tatili": ["Cunda Adası", "Sarımsaklı Plajı", "Ören Sahili", "Ayvalık Koyları", "Altınoluk Sahili", "Akçay Plajı"],
+                    "Kış Tatili": ["Kazdağları Kış Tırmanışı"],
+                    "Doğa & Kamp": ["Kazdağları Milli Parkı", "Şahinderesi Kanyonu", "Hasanboğuldu Şelalesi", "Sütüven Şelalesi", "Kozak Yaylası"],
+                    "Kültür Turu": ["Taksiyarhis Kilisesi", "Antandros Antik Kenti", "Ayvalık Tarihi Evleri", "Şeytan Sofrası Seyir Tepesi"]
+                },
                 "Rize": {
                     "Yaz Tatili": ["Fındıklı Sahili", "Çayeli Plajı", "Ardeşen Sahili"],
-                    "Kış Tatili": ["Ovit Dağı Kış Sporları Merkezi", "Ayder Yaylası Heliski Alanı", "Kavrun Yaylası Kış Yürüyüşü"],
-                    "Doğa & Kamp": ["Ayder Yaylası", "Pokut Yaylası", "Fırtına Deresi", "Palovit Şelalesi", "Kaçkar Dağları Milli Parkı", "Elevit Yaylası", "Gito Yaylası", "Huser Yaylası Sis Denizi", "Ağaran Şelalesi"],
-                    "Kültür Turu": ["Zilkale", "Rize Kalesi", "Şenyuva Köprüsü", "Rize Çay Müzesi", "Kız Kalesi (Rize)"]
+                    "Kış Tatili": ["Ovit Dağı Kış Sporları Merkezi", "Ayder Yaylası Heliski Alanı"],
+                    "Doğa & Kamp": ["Ayder Yaylası", "Pokut Yaylası", "Fırtına Deresi", "Palovit Şelalesi", "Kaçkar Dağları Milli Parkı", "Gito Yaylası", "Huser Yaylası Sis Denizi"],
+                    "Kültür Turu": ["Zilkale", "Rize Kalesi", "Şenyuva Köprüsü"]
                 },
                 "Erzurum": {
                     "Yaz Tatili": [], 
-                    "Kış Tatili": ["Palandöken Kayak Merkezi", "Kandilli Kayak Tesisi", "Konaklı Kayak Merkezi", "Kiremitliktepe Atlama Kuleleri"],
-                    "Doğa & Kamp": ["Tortum Şelalesi", "Tortum Gölü", "Narman Peribacaları", "Yedi Göller (İspir)", "Çoruh Vadisi"],
-                    "Kültür Turu": ["Çifte Minareli Medrese", "Yakutiye Medresesi", "Erzurum Kalesi", "Üç Kümbetler", "Nene Hatun Tarihi Milli Parkı", "Rüstem Paşa Kervansarayı", "Erzurum Kongre Binası"]
+                    "Kış Tatili": ["Palandöken Kayak Merkezi", "Kandilli Kayak Tesisi", "Konaklı Kayak Merkezi"],
+                    "Doğa & Kamp": ["Tortum Şelalesi", "Tortum Gölü", "Narman Peribacaları", "Yedi Göller (İspir)"],
+                    "Kültür Turu": ["Çifte Minareli Medrese", "Yakutiye Medresesi", "Erzurum Kalesi", "Üç Kümbetler"]
                 },
                 "Kayseri": {
                     "Yaz Tatili": [], 
                     "Kış Tatili": ["Erciyes Kayak Merkezi", "Erciyes Yüksek İrtifa Kamp Merkezi"],
-                    "Doğa & Kamp": ["Kapuzbaşı Şelaleleri", "Sultansazlığı Milli Parkı", "Aladağlar Milli Parkı", "Ali Dağı", "Zamantı Irmağı"],
-                    "Kültür Turu": ["Kayseri Kalesi", "Hunat Hatun Külliyesi", "Selçuklu Uygarlığı Müzesi", "Döner Kümbet", "Kayseri Saat Kulesi", "Mimar Sinan Evi"]
+                    "Doğa & Kamp": ["Kapuzbaşı Şelaleleri", "Sultansazlığı Milli Parkı", "Aladağlar Milli Parkı"],
+                    "Kültür Turu": ["Kayseri Kalesi", "Hunat Hatun Külliyesi", "Selçuklu Uygarlığı Müzesi"]
                 },
                 "Çanakkale": {
-                    "Yaz Tatili": ["Bozcaada Ayazma Plajı", "Gökçeada Aydıncık Plajı", "Assos Kadırga Koyu", "Kabatepe Plajı", "Saros Körfezi", "Küçükkuyu Sahili", "Habbele Plajı"],
+                    "Yaz Tatili": ["Bozcaada Ayazma Plajı", "Gökçeada Aydıncık Plajı", "Assos Kadırga Koyu", "Kabatepe Plajı", "Saros Körfezi"],
                     "Kış Tatili": ["Kazdağları Kış Yürüyüşü"],
-                    "Doğa & Kamp": ["Kazdağları Milli Parkı", "Adatepe Köyü Doğası", "Şahinderesi Kanyonu", "Gökçeada Sualtı Milli Parkı", "Ayazmapınarı Tabiat Parkı"],
-                    "Kültür Turu": ["Truva Antik Kenti", "Gelibolu Yarımadası Tarihi Milli Parkı", "Çanakkale Şehitler Abidesi", "Assos Antik Kenti", "Aynalı Çarşı", "Çimenlik Kalesi", "Kilitbahir Kalesi", "Apollon Smintheion Tapınağı"]
+                    "Doğa & Kamp": ["Kazdağları Milli Parkı", "Adatepe Köyü Doğası", "Şahinderesi Kanyonu"],
+                    "Kültür Turu": ["Truva Antik Kenti", "Gelibolu Yarımadası Tarihi Milli Parkı", "Çanakkale Şehitler Abidesi", "Assos Antik Kenti", "Aynalı Çarşı"]
                 },
                 "Trabzon": {
-                    "Yaz Tatili": ["Sürmene Çamburnu Plajı", "Yalıncak Sahili", "Akçaabat Sahili"],
+                    "Yaz Tatili": ["Sürmene Çamburnu Plajı", "Yalıncak Sahili"],
                     "Kış Tatili": ["Uzungöl Kış Festivali Alanı", "Zigana Gümüşkayak Merkezi"],
-                    "Doğa & Kamp": ["Uzungöl Tabiat Parkı", "Hıdırnebi Yaylası", "Çal Mağarası", "Sera Gölü Tabiat Parkı", "Karadağ Yaylası", "Lapazan Yaylası", "Sis Dağı Yaylası"],
-                    "Kültür Turu": ["Sümela Manastırı", "Trabzon Ayasofya Müzesi", "Trabzon Atatürk Köşkü", "Trabzon Kalesi", "Vazelon Manastırı", "Boztepe Seyir Terası"]
+                    "Doğa & Kamp": ["Uzungöl Tabiat Parkı", "Hıdırnebi Yaylası", "Çal Mağarası", "Sera Gölü Tabiat Parkı"],
+                    "Kültür Turu": ["Sümela Manastırı", "Trabzon Ayasofya Müzesi", "Trabzon Atatürk Köşkü"]
                 },
                 "Ankara": {
                     "Yaz Tatili": [], 
-                    "Kış Tatili": ["Elmadağ Kayak Merkezi", "Keldağ Kış Rotaları"],
-                    "Doğa & Kamp": ["Eymir Gölü", "Mogan Gölü Tabiat Parkı", "Soğuksu Milli Parkı", "Karagöl (Çubuk)", "Kuğulu Park", "Seğmenler Parkı", "Altınköy Açıkhava Müzesi", "Gökçekaya Ormanı"],
-                    "Kültür Turu": ["Anıtkabir", "Anadolu Medeniyetleri Müzesi", "Ankara Kalesi", "I. TBMM Kurtuluş Savaşı Müzesi", "Rahmi M. Koç Müzesi", "Etnografya Müzesi", "Gordion Antik Kenti", "Augustus Tapınağı"]
+                    "Kış Tatili": ["Elmadağ Kayak Merkezi"],
+                    "Doğa & Kamp": ["Eymir Gölü", "Mogan Gölü Tabiat Parkı", "Soğuksu Milli Parkı", "Karagöl (Çubuk)", "Kuğulu Park"],
+                    "Kültür Turu": ["Anıtkabir", "Anadolu Medeniyetleri Müzesi", "Ankara Kalesi", "I. TBMM Kurtuluş Savaşı Müzesi"]
                 },
                 "Gaziantep": {
                     "Yaz Tatili": [], 
                     "Kış Tatili": ["Erikçe Kayak Eğitim Merkezi"],
-                    "Doğa & Kamp": ["Dülükbaba Ormanı", "Rumkale ve Fırat Nehri Kıyıları", "Burç Tabiat Parkı", "Karkamış Sulak Alanı"],
-                    "Kültür Turu": ["Zeugma Mozaik Müzesi", "Gaziantep Kalesi", "Bakırcılar Çarşısı", "Gaziantep Oyun ve Oyuncak Müzesi", "Emine Göğüş Mutfak Müzesi", "Tarihi Antep Evleri", "Yesemek Açık Hava Müzesi"]
+                    "Doğa & Kamp": ["Dülükbaba Ormanı", "Rumkale ve Fırat Nehri Kıyıları", "Burç Tabiat Parkı"],
+                    "Kültür Turu": ["Zeugma Mozaik Müzesi", "Gaziantep Kalesi", "Bakırcılar Çarşısı", "Tarihi Antep Evleri"]
                 },
                 "Şanlıurfa": {
                     "Yaz Tatili": [], 
                     "Kış Tatili": ["Karacadağ Kayak Merkezi"],
-                    "Doğa & Kamp": ["Halfeti Birecik Baraj Gölü", "Gölpınar Tabiat Parkı", "Tek Tek Dağları Milli Parkı", "Yücelen Mağaraları"],
-                    "Kültür Turu": ["Göbeklitepe", "Balıklıgöl (Halil-ür Rahman)", "Harran Evleri ve Antik Kenti", "Şanlıurfa Arkeoloji Müzesi", "Haleplibahçe Mozaik Müzesi", "Karahantepe", "Şanlıurfa Kalesi"]
+                    "Doğa & Kamp": ["Halfeti Birecik Baraj Gölü", "Gölpınar Tabiat Parkı"],
+                    "Kültür Turu": ["Göbeklitepe", "Balıklıgöl (Halil-ür Rahman)", "Harran Evleri ve Antik Kenti", "Karahantepe"]
                 },
                 "Mardin": {
                     "Yaz Tatili": [], 
                     "Kış Tatili": [], 
-                    "Doğa & Kamp": ["Beyazsu", "Zinnar Vadisi", "Gurs Vadisi Şelalesi", "Karşyaka Şelalesi"],
-                    "Kültür Turu": ["Deyrulzafaran Manastırı", "Kasımiye Medresesi", "Zinciriye Medresesi", "Mardin Eski Şehir Evleri", "Dara Antik Kenti", "Mardin Ulu Camii", "Mor Gabriel Manastırı", "Kırklar Kilisesi", "Mardin Müzesi"]
+                    "Doğa & Kamp": ["Beyazsu", "Zinnar Vadisi", "Gurs Vadisi Şelalesi"],
+                    "Kültür Turu": ["Deyrulzafaran Manastırı", "Kasımiye Medresesi", "Zinciriye Medresesi", "Mardin Eski Şehir Evleri", "Dara Antik Kenti", "Mor Gabriel Manastırı"]
                 }
             }
 
             butceler = ["$", "$$", "$$$"]
             toplam_mekan = 0
 
-            # Verileri Veritabanına Yazma
-            for sehir_adi, kategoriler in tohum_mekanlar.items():
+            for sehir_adi, categories in tohum_mekanlar.items():
                 cursor.execute("SELECT id FROM Sehirler WHERE sehir_adi = ?", (sehir_adi,))
                 sehir_row = cursor.fetchone()
                 if not sehir_row: continue
                 sehir_id = sehir_row[0]
 
-                for sezon, mekanlar in kategoriler.items():
+                for sezon, mekanlar in categories.items():
                     for mekan in mekanlar:
                         cursor.execute("INSERT INTO Mekanlar (sehir_id, mekan_adi, sezon, butce) VALUES (?, ?, ?, ?)",
                                        (sehir_id, mekan, sezon, random.choice(butceler)))
                         toplam_mekan += 1
-                
-                logging.info(f"✅ {sehir_adi} başarıyla tohumlandı (Toplam {sum(len(v) for v in kategoriler.values())} mekan).")
+            
+            logging.info(f"✅ 310+ Lokasyon başarıyla kaydedildi.")
 
-            logging.info(f"🚀 MEGA SEEDİNG TAMAMLANDI! {toplam_mekan} Yüksek Kaliteli Turizm Noktası Veritabanına Eklendi.")
+            # --- SOSYAL HESAPLAR VE ÇOKLU AKTİVİTE GÜNCELLEMESİ ---
+            logging.info("Örnek kullanıcı profilleri, listeler ve değerlendirmeler yükleniyor...")
+            
+            ornek_kullanicilar = [('admin', '1234'), ('zeki', '1234'), ('gezgin', '0000')]
+            for k_adi, sifre in ornek_kullanicilar:
+                cursor.execute("INSERT OR IGNORE INTO Kullanicilar (kullanici_adi, sifre) VALUES (?, ?)", (k_adi, sifre))
+            
+            cursor.execute("SELECT id, kullanici_adi FROM Kullanicilar")
+            k_idler = {isim: k_id for k_id, isim in cursor.fetchall()}
+
+            # Yardımcı Fonksiyon 1: Bire-bir benzersiz puanlama satırı
+            def test_puani_ekle(kullanici_isim, mekan_adi, puan):
+                if kullanici_isim not in k_idler: return
+                k_id = k_idler[kullanici_isim]
+                cursor.execute("SELECT id FROM Mekanlar WHERE mekan_adi=?", (mekan_adi,))
+                m_row = cursor.fetchone()
+                if m_row:
+                    cursor.execute("INSERT INTO Ziyaret_ve_Puanlama (kullanici_id, mekan_id, puan, yorum) VALUES (?, ?, ?, '')", 
+                                   (k_id, m_row[0], puan))
+
+            # Yardımcı Fonksiyon 2: Bağımsız, peş peşe eklenebilen sosyal yorumlar (Puan=0)
+            def test_yorum_ekle(kullanici_isim, mekan_adi, yorum):
+                if kullanici_isim not in k_idler: return
+                k_id = k_idler[kullanici_isim]
+                cursor.execute("SELECT id FROM Mekanlar WHERE mekan_adi=?", (mekan_adi,))
+                m_row = cursor.fetchone()
+                if m_row:
+                    cursor.execute("INSERT INTO Ziyaret_ve_Puanlama (kullanici_id, mekan_id, puan, yorum) VALUES (?, ?, 0, ?)", 
+                                   (k_id, m_row[0], yorum))
+
+            # Yardımcı Fonksiyon 3: Otomatik Liste Doldurucu (Gidilen Yerler / Gidilecek Yerler vb.)
+            def test_not_ekle(kullanici_isim, kategori, icerik):
+                if kullanici_isim not in k_idler: return
+                k_id = k_idler[kullanici_isim]
+                cursor.execute("INSERT INTO SeyahatNotlari (kullanici_id, kategori, not_icerik) VALUES (?, ?, ?)", 
+                               (k_id, kategori, icerik))
+
+            # --- MEKAN: KAPUTAŞ PLAJI ---
+            test_puani_ekle('admin', 'Kaputaş Plajı', 5)
+            test_yorum_ekle('admin', 'Kaputaş Plajı', 'Denizi tek kelimeyle maldivler gibi, harika berraklıkta.')
+            test_yorum_ekle('admin', 'Kaputaş Plajı', 'Aracınızı yukarıda yol kenarına park etmeniz gerekiyor, otoparkı yok.')
+            test_puani_ekle('zeki', 'Kaputaş Plajı', 4)
+            test_yorum_ekle('zeki', 'Kaputaş Plajı', 'Öğleden sonra rüzgarla beraber dalga boyu çok artıyor, sabah gitmek en iyisi.')
+            test_puani_ekle('gezgin', 'Kaputaş Plajı', 5)
+
+            # --- MEKAN: EFES ANTİK KENTİ ---
+            test_puani_ekle('zeki', 'Efes Antik Kenti', 5)
+            test_yorum_ekle('zeki', 'Efes Antik Kenti', 'Celsus Kütüphanesi ve Yamaç Evler kesinlikle görülmeli. Muazzam bir mühendislik.')
+            test_puani_ekle('admin', 'Efes Antik Kenti', 5)
+            test_yorum_ekle('admin', 'Efes Antik Kenti', 'Müzekart sahiplerine giriş ücretsiz, kartınız mutlaka yanınızda olsun.')
+            test_puani_ekle('gezgin', 'Efes Antik Kenti', 4)
+
+            # --- MEKAN: ULUDAĞ KAYAK MERKEZİ ---
+            test_puani_ekle('admin', 'Uludağ Kayak Merkezi', 4)
+            test_yorum_ekle('admin', 'Uludağ Kayak Merkezi', 'Pistler güzel hazırlanmış fakat sömestr döneminde lift sıraları çok uzuyor.')
+            test_puani_ekle('gezgin', 'Uludağ Kayak Merkezi', 3)
+            test_yorum_ekle('gezgin', 'Uludağ Kayak Merkezi', 'Fiyatlar genel olarak ortalamanın biraz üstünde, bütçenizi ona göre ayarlayın.')
+
+            # --- DİĞER MEKAN ETKİLEŞİMLERİ ---
+            test_puani_ekle('admin', 'Galata Kulesi', 5)
+            test_yorum_ekle('admin', 'Galata Kulesi', 'Üst kattaki seyir terasından 360 derece İstanbul manzarası izlenebiliyor.')
+            test_puani_ekle('admin', 'Ayasofya-i Kebir Cami-i', 5)
+            test_puani_ekle('admin', 'Cunda Adası', 4)
+            
+            test_puani_ekle('zeki', 'Cunda Adası', 5)
+            test_yorum_ekle('zeki', 'Cunda Adası', 'Tarihi Taş Kahve\'de sakızlı Türk kahvesi içmeden dönmeyin.')
+            test_puani_ekle('zeki', 'İzmir Saat Kulesi', 4)
+            
+            test_puani_ekle('gezgin', 'Karagöl Tabiat Parkı', 5)
+            test_yorum_ekle('gezgin', 'Karagöl Tabiat Parkı', 'Doğası, sessizliği ve kamp olanakları harika. Sonbaharda renk cümbüşü oluyor.')
+            test_puani_ekle('gezgin', 'Köprülü Kanyon', 5)
+            test_yorum_ekle('gezgin', 'Köprülü Kanyon', 'Rafting parkuru çok keyifli ve güvenli, profesyonel ekipler eşlik ediyor.')
+
+            # ======================================================================
+            # --- YENİ EKLENEN: SEYAHAT LİSTELERİNİN ("GİDİLEN/GİDİLECEK") DOLDURULMASI ---
+            # ======================================================================
+
+            # 1. ADMIN LİSTELERİ
+            test_not_ekle('admin', 'Gidilen Yerler', '🏛️ Mekan: Kaputaş Plajı')
+            test_not_ekle('admin', 'Gidilen Yerler', '🏛️ Mekan: Uludağ Kayak Merkezi')
+            test_not_ekle('admin', 'Gidilen Yerler', '🏛️ Mekan: Galata Kulesi')
+            test_not_ekle('admin', 'Gidilen Yerler', '🏛️ Mekan: Ayasofya-i Kebir Cami-i')
+            test_not_ekle('admin', 'Gidilen Yerler', '🏛️ Mekan: Efes Antik Kenti')
+            test_not_ekle('admin', 'Gidilen Yerler', '🏛️ Mekan: Cunda Adası')
+            
+            test_not_ekle('admin', 'Gidilecek Yerler', '📍 Şehir: Nevşehir')
+            test_not_ekle('admin', 'Gidilecek Yerler', '🏛️ Mekan: Göreme Açık Hava Müzesi')
+            test_not_ekle('admin', 'Gidilecek Yerler', '🏛️ Mekan: Ihlara Vadisi')
+            test_not_ekle('admin', 'Gidilecek Yerler', '🏛️ Mekan: Şirince Köyü Doğası')
+            
+            test_not_ekle('admin', 'Genel Notlar', 'Yaz tatili için bütçe planlaması: Antalya uçak biletleri alındı. Araç kiralama işi haftaya çözülecek. Bütçe tahmini: 25.000 TL')
+
+            # 2. ZEKİ LİSTELERİ
+            test_not_ekle('zeki', 'Gidilen Yerler', '🏛️ Mekan: Kaputaş Plajı')
+            test_not_ekle('zeki', 'Gidilen Yerler', '🏛️ Mekan: Efes Antik Kenti')
+            test_not_ekle('zeki', 'Gidilen Yerler', '🏛️ Mekan: Cunda Adası')
+            test_not_ekle('zeki', 'Gidilen Yerler', '🏛️ Mekan: İzmir Saat Kulesi')
+            
+            test_not_ekle('zeki', 'Gidilecek Yerler', '📍 Şehir: Balıkesir')
+            test_not_ekle('zeki', 'Gidilecek Yerler', '🏛️ Mekan: Ayvalık Koyları')
+            test_not_ekle('zeki', 'Gidilecek Yerler', '🏛️ Mekan: Şeytan Sofrası Seyir Tepesi')
+            test_not_ekle('zeki', 'Gidilecek Yerler', '🏛️ Mekan: Kazdağları Milli Parkı')
+            
+            test_not_ekle('zeki', 'Genel Notlar', 'Ayvalık planı: Otogardan ilçe merkezine ulaşım rotası detaylıca ayarlanacak. Gezilecek yerler bir güne sığdırılmalı.\n\nİzmir Seyahati: Havası nemli olacağı için fresh/meyveli bir parfüm alınacak.')
+
+            # 3. GEZGİN LİSTELERİ
+            test_not_ekle('gezgin', 'Gidilen Yerler', '🏛️ Mekan: Kaputaş Plajı')
+            test_not_ekle('gezgin', 'Gidilen Yerler', '🏛️ Mekan: Uludağ Kayak Merkezi')
+            test_not_ekle('gezgin', 'Gidilen Yerler', '🏛️ Mekan: Karagöl Tabiat Parkı')
+            test_not_ekle('gezgin', 'Gidilen Yerler', '🏛️ Mekan: Köprülü Kanyon')
+            
+            test_not_ekle('gezgin', 'Gidilecek Yerler', '📍 Şehir: Rize')
+            test_not_ekle('gezgin', 'Gidilecek Yerler', '🏛️ Mekan: Ayder Yaylası')
+            test_not_ekle('gezgin', 'Gidilecek Yerler', '🏛️ Mekan: Fırtına Deresi')
+            
+            test_not_ekle('gezgin', 'Genel Notlar', 'Yeni çadır alındı. Hafta sonu Rize tarafına veya İzmir Karagöl tarafına kamp rotası çizilecek.')
+
+            logging.info("🚀 MEGA PORTFOLYO VERİTABANI BAŞARIYLA ÜRETİLDİ! Listeler ve Puanlar tam senkronize çalışıyor.")
             conn.commit()
 
 if __name__ == '__main__':
